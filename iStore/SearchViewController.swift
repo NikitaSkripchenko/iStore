@@ -52,13 +52,14 @@ class SearchViewController: UIViewController {
             return try Data(contentsOf: url)
         } catch {
             print("Download Error: \(error.localizedDescription)")
+            showNetworkError()
             return nil
         }
     }
     
     func iTunesURL(_ searchString: String) -> URL{
         let encodedString = searchString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        let urlString = String(format: "https://itunes.apple.com/search?term=%@", encodedString)
+        let urlString = String(format: "https://sadaitunes.apple.com/search?term=%@", encodedString)
         let url = URL(string: urlString)
         return url!
     }
@@ -72,6 +73,15 @@ class SearchViewController: UIViewController {
             print(error)
             return []
         }
+    }
+    
+    func showNetworkError(){
+        let alert = UIAlertController(title: "Whoops...",
+                                  message: "There was an error accessing the iTunes Store." +
+            " Please try again.", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
     }
     
 }
