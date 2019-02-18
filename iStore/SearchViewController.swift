@@ -59,7 +59,7 @@ class SearchViewController: UIViewController {
     
     func iTunesURL(_ searchString: String) -> URL{
         let encodedString = searchString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        let urlString = String(format: "https://sadaitunes.apple.com/search?term=%@", encodedString)
+        let urlString = String(format: "https://itunes.apple.com/search?term=%@", encodedString)
         let url = URL(string: urlString)
         return url!
     }
@@ -95,8 +95,7 @@ extension SearchViewController: UISearchBarDelegate{
             let url = iTunesURL(searchBar.text!)
             print("URL: '\(url)'")
             if let data = performStoreRequest(with: url) {
-                let results = parse(data)
-                print("\(results)")
+                searchResults = parse(data)
             }
             tableView.reloadData()
         }
@@ -126,6 +125,11 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource{
         }else{
             let cell = tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.searchResultCell, for: indexPath) as! SearchResultCell
             let searchResult = searchResults[indexPath.row]
+            if searchResult.artist.isEmpty{
+                cell.artistNameLabel.text = "Unknown"
+            }else{
+                cell.artistNameLabel.text = String(format: "%@ (%@)", searchResult.artist, searchResult.type)
+            }
             cell.artistNameLabel.text = searchResult.name
             cell.nameLabel.text = searchResult.artistName
             return cell
