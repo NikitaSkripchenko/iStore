@@ -13,6 +13,11 @@ class ResultArray: Codable {
     var results = [SearchResult]()
 }
 
+func < (lhs: SearchResult, rhs: SearchResult) -> Bool {
+    return lhs.name.localizedStandardCompare(rhs.name) == .orderedAscending
+}
+
+
 class SearchResult: CustomStringConvertible, Codable{
     var trackName: String? = ""
     var artistName: String? = ""
